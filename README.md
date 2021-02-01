@@ -10,8 +10,3 @@
 
 This image is an utility used mainly to application development.  
 See more: https://github.com/eradman/entr
-
-
-## License
-
-MIT © [Thiago Lagden](http://lagden.in)

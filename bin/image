@@ -45,6 +45,7 @@ load_env $CURR_FOLDER $OPT
 REGISTRY_USER="$( cat ${CURR_FOLDER}/.registry-user )"
 REGISTRY_PASSWD="$( cat ${CURR_FOLDER}/.registry-passwd )"
 TAG_IMAGE="${REGISTRY}/${IMAGE}:${VERSION}"
+TAG_IMAGE_LATEST="${REGISTRY}/${IMAGE}:latest"
 
 ## Build
 docker build \
@@ -52,8 +53,9 @@ docker build \
 test $? -ne 0 && abort "Falha no build da image --> ${build}" || ok "Build image ok --> ${build}"
 
 ## Push (Send image to Registry)
-# cat ${CURR_FOLDER}/.registry-passwd | docker login $REGISTRY --username $REGISTRY_USER --password-stdin
-# docker push $TAG_IMAGE
+cat ${CURR_FOLDER}/.registry-passwd | docker login $REGISTRY --username $REGISTRY_USER --password-stdin
+docker push $TAG_IMAGE
+docker push $TAG_IMAGE_LATEST
 
 # Cleanup
 # docker rmi $(docker images -q -f "dangling=true" -f "label=autodelete=true")
