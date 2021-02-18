@@ -4,20 +4,6 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
 # Import functions
 . $DIR/_fn
-. $DIR/_env
-
-usage() {
-	cat <<-EOF
-
-  Usage: $0 [options]
-
-  Options:
-    -e <production|staging>  Environment
-    -h                       Show usage
-
-EOF
-exit 0
-}
 
 # Go to project root
 cd $DIR
@@ -25,18 +11,6 @@ cd ..
 
 CURR_FOLDER="$( pwd )"
 OPT="production"
-
-while getopts ":e:" o
-do
-	case ${o} in
-		e) [ $OPTARG = "staging" -o $OPTARG = "production" ] && OPT=$OPTARG || usage ;;
-		*) usage ;;
-	esac
-done
-
-if test -z ${OPT}; then
-	abort "Missing environment"
-fi
 
 # ENV File
 load_env $CURR_FOLDER $OPT
@@ -49,16 +23,18 @@ TAG_IMAGE_LATEST="${REGISTRY}/${IMAGE}:latest"
 
 ## Build
 docker build \
-	--compress --force-rm --no-cache . --tag $TAG_IMAGE --tag $TAG_IMAGE_LATEST
-test $? -ne 0 && abort "Falha no build da image --> ${build}" || ok "Build image ok --> ${build}"
+	--compress \
+	--force-rm \
+	--no-cache . \
+	--tag $TAG_IMAGE \
+	--tag $TAG_IMAGE_LATEST
+
+test $? -ne 0 && abort "Falha no build da image --> ${IMAGE}" || ok "Build image ok --> ${IMAGE}"
 
 ## Push (Send image to Registry)
 cat ${CURR_FOLDER}/.registry-passwd | docker login $REGISTRY --username $REGISTRY_USER --password-stdin
 docker push $TAG_IMAGE
 docker push $TAG_IMAGE_LATEST
-
-# Cleanup
-# docker rmi $(docker images -q -f "dangling=true" -f "label=autodelete=true")
 
 ok "Build finalizado... Yeahh!!!"
 
