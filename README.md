@@ -2,7 +2,7 @@
 
 [![Docker Release][dockerelease-img]][dockerelease]
 
-[dockerelease-img]:    https://img.shields.io/docker/v/lagden/entr/5.0-alpine3.14
+[dockerelease-img]:    https://img.shields.io/docker/v/lagden/entr/5.2-alpine3.15
 [dockerelease]:        https://hub.docker.com/r/lagden/entr
 
 
