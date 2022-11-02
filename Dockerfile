@@ -1,5 +1,5 @@
 # Auxiliar
-FROM alpine:3.15 as compile
+FROM alpine:3.16 as compile
 RUN apk update && apk add --no-cache \
 	file autoconf automake libtool gettext gettext-dev make g++ texinfo
 
@@ -13,6 +13,6 @@ RUN make test
 RUN make install
 
 # Imagem
-FROM alpine:3.15
+FROM alpine:3.16
 COPY --from=compile /usr/local/bin/entr /usr/local/bin/.
 ENTRYPOINT ["entr"]
