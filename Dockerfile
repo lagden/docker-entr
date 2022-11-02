@@ -13,6 +13,6 @@ RUN make test
 RUN make install
 
 # Imagem
-FROM alpine:3.16
+FROM alpine:3.16 as main
 COPY --from=compile /usr/local/bin/entr /usr/local/bin/.
 ENTRYPOINT ["entr"]
